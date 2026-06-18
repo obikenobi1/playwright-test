@@ -73,6 +73,7 @@ public class SimpleTestCustomize {
         //since the URL is under menubar element, not on categories element. I use menubar Locator for get by role and it works.
         Locator handToolsLink = menubar.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Hand Tools"));
 
+        assertThat(handToolsLink).hasText("Hand Tools");
         categoriesBtn.click();
         handToolsLink.click();
         assertThat(page).hasURL("https://practicesoftwaretesting.com/category/hand-tools");
@@ -92,6 +93,8 @@ public class SimpleTestCustomize {
         //need trim because have inconsistent space
         Assertions.assertTrue(outOfStockItems.contains("Long Nose Pliers"));
 
+
     }
+
 
 }
