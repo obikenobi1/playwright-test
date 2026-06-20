@@ -3,30 +3,19 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import com.microsoft.playwright.junit.Options;
 import com.microsoft.playwright.junit.OptionsFactory;
 import com.microsoft.playwright.junit.UsePlaywright;
+import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.SelectOption;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-@UsePlaywright(FormInputTest.MyOptions.class)
+@UsePlaywright(HeadlessChromeOptions.class)
 public class FormInputTest {
-
-    public static class MyOptions implements OptionsFactory {
-        @Override
-        public Options getOptions() {
-            return new Options()
-                    .setHeadless(false)
-                    .setLaunchOptions(new BrowserType.LaunchOptions()
-                            .setArgs(Arrays.asList("--disable-extensions")));
-        }
-    }
-    @BeforeEach
-    void configure(Playwright playwright) {
-        playwright.selectors().setTestIdAttribute("data-test");
-    }
 
     @BeforeEach
     void openContractPage(Page page) {
@@ -67,13 +56,29 @@ public class FormInputTest {
         page.setInputFiles("#attachment", Paths.get(ClassLoader.getSystemResource("data/sample-text.txt").toURI()));
         String uploadedFile = uploadField.inputValue();
         Assertions.assertThat(uploadedFile).endsWith("sample-text.txt");
-        System.out.println("");
-
-
-
-
-
-
     }
+
+    @DisplayName("Mandatory Fields")
+    @ParameterizedTest
+    @ValueSource(strings={"First name","Last name","Email","Message"})
+    void mandatoryFields(String fieldname, Page page){
+        Locator firstNameField = page.getByLabel("First name");
+        Locator lastNameField = page.getByLabel("Last name");
+        Locator emailNameField = page.getByLabel("Email");
+        Locator messageField = page.getByLabel("Message");
+        Locator subjectField = page.getByLabel("Subject");
+        Locator uploadField = page.getByLabel("Attachment");
+
+        page.getByLabel(fieldname).clear();
+
+        Locator sendButton = page.getByText("Send");
+        sendButton.click();
+
+        Locator errorMessage = page.getByRole(AriaRole.ALERT).getByText(fieldname + " is required");
+        assertThat(errorMessage).isVisible();
+        //org.assertj.core.api.Assertions.assertThat("") assertions for general value
+        //Playwright Assertions assertion for playwright locator
+    }
+
 
 }

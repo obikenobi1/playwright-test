@@ -1,40 +1,63 @@
-Phase 1 — Locators & web-first assertions (finish where you are)
+# Playwright Learning Roadmap
 
-Master role-based locators: getByRole, getByLabel, getByText, getByTestId (prefer these over CSS/XPath)
-Web-first assertions: expect(locator).toBeVisible(), toHaveText(), toHaveValue()
-Internalize auto-waiting / auto-retry — this is the big mindset shift from Selenium; you stop writing explicit waits
-Deliverable: a spec that logs into SauceDemo and asserts you land on the inventory page
+A phased plan for learning Playwright end-to-end test automation, from locators through CI integration. Each phase ends with a concrete deliverable so progress is demonstrable.
 
-Phase 2 — Structure: POM, config, fixtures
+## Phase 1 — Locators & Web-First Assertions
 
-Page Object Model the Playwright way (locators as class properties, action methods)
-playwright.config.ts: baseURL, browser projects, retries, reporters
-Custom fixtures (test.extend) — Playwright's dependency injection; it replaces most of your TestNG @BeforeMethod setup
-Deliverable: login flow refactored into a LoginPage POM + a logged-in fixture
+Build a solid foundation in how Playwright finds elements and verifies state.
 
-Phase 3 — Real E2E flows (use your own login-page test cases as the spec)
+- Master role-based locators: `getByRole`, `getByLabel`, `getByText`, `getByTestId`. Prefer these over CSS or XPath selectors.
+- Learn web-first assertions: `expect(locator).toBeVisible()`, `toHaveText()`, `toHaveValue()`.
+- Internalize auto-waiting and auto-retry. This is the core mindset shift coming from Selenium — explicit waits are no longer needed because locators retry until the element is actionable.
 
-Valid login, invalid credentials, locked-out user, empty-field validation
-storageState to save auth and skip login on later tests — a core Playwright idiom
-Data-driven tests (loop over credential sets)
-Deliverable: a suite that implements the test cases your agent generated — now you have spec → automation across two projects
+**Deliverable:** A spec that logs into SauceDemo and asserts the user lands on the inventory page.
 
-Phase 4 — API + network
+## Phase 2 — Structure: Page Object Model, Config, Fixtures
 
-request fixture for API testing (this is your REST-Assured-equivalent the JD asks for)
-page.route() to mock/stub backend responses
-Set up state via API, verify via UI
-Deliverable: one test that seeds data through the API then asserts it in the UI
+Organize tests for maintainability and scale.
 
-Phase 5 — Debugging, reporting, CI
+- Apply the Page Object Model the Playwright way: locators as class properties, with action methods encapsulating interactions.
+- Configure `playwright.config.ts`: `baseURL`, browser projects, retries, and reporters.
+- Use custom fixtures (`test.extend`) — Playwright's dependency injection, which replaces most setup logic that would live in TestNG `@BeforeMethod` hooks.
 
-Trace Viewer (--trace on), UI mode (--ui), --debug
-HTML reporter; screenshot/video on failure
-Run it in GitHub Actions (you have CI/CD experience — show it on a green badge)
-Parallelization & sharding
-Deliverable: repo with passing CI and a published HTML report
+**Deliverable:** The login flow refactored into a `LoginPage` Page Object plus a logged-in fixture.
 
-Phase 6 — Job-specific edge (direct JD hits)
+## Phase 3 — Real End-to-End Flows
 
-Try Playwright MCP with Claude — the JD names it explicitly, and it connects straight to your AI-agent work. This is a rare, high-signal thing to be able to talk about.
-Skim accessibility/visual snapshot testing (awareness is enough)
+Implement realistic user journeys driven by actual test cases.
+
+- Cover key login scenarios: valid login, invalid credentials, locked-out user, and empty-field validation.
+- Use `storageState` to save authentication and skip login on subsequent tests — a core Playwright idiom.
+- Write data-driven tests that loop over multiple credential sets.
+
+**Deliverable:** A suite that implements a full set of login test cases, demonstrating the path from specification to automation.
+
+## Phase 4 — API & Network
+
+Combine UI testing with API control and network interception.
+
+- Use the `request` fixture for API testing (the equivalent of REST-Assured).
+- Use `page.route()` to mock or stub backend responses.
+- Set up application state via the API, then verify the result through the UI.
+
+**Deliverable:** A test that seeds data through the API and then asserts it appears correctly in the UI.
+
+## Phase 5 — Debugging, Reporting, CI
+
+Make tests observable, debuggable, and continuously run.
+
+- Use Trace Viewer (`--trace on`), UI mode (`--ui`), and `--debug`.
+- Configure the HTML reporter, with screenshots and video captured on failure.
+- Run the suite in GitHub Actions and surface a passing build badge.
+- Apply parallelization and sharding for faster runs.
+
+**Deliverable:** A repository with passing CI and a published HTML report.
+
+## Phase 6 — Advanced & Specialized Topics
+
+Round out the skill set with high-signal extras.
+
+- Explore Playwright MCP integration with an AI assistant — a distinctive capability that connects browser automation to agentic workflows.
+- Gain awareness of accessibility and visual snapshot testing (familiarity is sufficient).
+
+**Deliverable:** A short proof-of-concept or notes demonstrating one advanced topic.

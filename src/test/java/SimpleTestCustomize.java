@@ -81,6 +81,8 @@ public class SimpleTestCustomize {
         //using wait because the list need to load first
         page.waitForSelector("a.card");
 
+        //page.waitForCondition(() -> page.getByRole(AriaRole.ALERT).isHidden() );
+
         //filter usage
         List<String> allProducts= page.getByTestId("product-name").filter(new Locator.FilterOptions().setHasNotText("Drill")).allTextContents();
         List<String> outOfStockItems = page.locator("a.card")
